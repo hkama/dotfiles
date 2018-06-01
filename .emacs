@@ -25,9 +25,7 @@
 ;; copy&paste using clipboard
 (setq x-select-enable-clipboard t)
 
-
-;; (setq-default indent-tabs-mode nil)
-
+(setq-default indent-tabs-mode nil)
 
 (if (display-graphic-p)
     (progn
@@ -67,9 +65,16 @@
 
 
 ;; use markdown-mode for emacs
+;; multimarkdownをinstallする必要がある
 (use-package markdown-mode
   :ensure t
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+;; Japanese
+;; uncommented by ueda. beacuse in shell buffer, they invokes mozibake
+(set-language-environment 'Japanese)
+(prefer-coding-system 'utf-8)
+(setq enable-double-n-syntax t)
