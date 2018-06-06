@@ -15,8 +15,9 @@
 
 (add-to-list 'load-path "~/.emacs.d/elisp")
 ;; enter利用を禁止
-(require 'drill-instructor)
-(setq drill-instructor-global t)
+;; (require 'drill-instructor)
+;; (setq drill-instructor-global t)
+
 ;; C-hをdeleteにする
 ;; もともとこれを入れてたがdrill-instructorのdelete禁止と競合するので下を使う
 ;; (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
@@ -47,10 +48,10 @@
 ;; highlight
 (global-hl-line-mode t) ;; 現在行をハイライト
 ;; ハイライトの色をダーク系にする
-(custom-set-faces
-'(hl-line ((t (:background "color-236")))))
-(custom-set-faces
-'(hl-line ((t (:background "color-220")))))
+;; (custom-set-faces
+;; '(hl-line ((t (:background "color-236")))))
+;; (custom-set-faces
+;; '(hl-line ((t (:background "color-220")))))
 
 
 (show-paren-mode t)                       ;; 対応する括弧をハイライト
@@ -93,6 +94,8 @@
   :config
   (global-anzu-mode +1))
 
+;; spacemacs風の見た目にする
+(load-theme 'spacemacs-dark t)
 
 
 
