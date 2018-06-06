@@ -42,17 +42,17 @@
 		(process-send-string proc text)
 		(process-send-eof proc))))))
 
-
-
-
 (setq scroll-step 1)
 
 ;; highlight
 (global-hl-line-mode t) ;; 現在行をハイライト
 ;; ハイライトの色をダーク系にする
 (custom-set-faces
-'(hl-line ((t (:background "color-236"))))
-)
+'(hl-line ((t (:background "color-236")))))
+(custom-set-faces
+'(hl-line ((t (:background "color-220")))))
+
+
 (show-paren-mode t)                       ;; 対応する括弧をハイライト
 (setq show-paren-style 'mixed)            ;; 括弧のハイライトの設定。
 (transient-mark-mode t)                   ;; 選択範囲をハイライト
@@ -78,3 +78,25 @@
 (set-language-environment 'Japanese)
 (prefer-coding-system 'utf-8)
 (setq enable-double-n-syntax t)
+
+;; 補完 company
+(use-package company
+  :config
+  (global-company-mode) ; 全バッファで有効にする 
+  (setq company-idle-delay 0) ; デフォルトは0.5
+  (setq company-minimum-prefix-length 2) ; デフォルトは4
+  (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+  )
+
+;; 検索文字が何番目か教えてくれるanzu
+(use-package anzu
+  :config
+  (global-anzu-mode +1))
+
+
+
+
+
+
+
+
