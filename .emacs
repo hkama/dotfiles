@@ -1,4 +1,4 @@
-
+;;;
 
 ;; use-packageのinstall(http://cachestocaches.com/2015/8/getting-started-use-package/より拝借)
 (require 'package)
@@ -154,13 +154,25 @@
 ;; 既存スニペットを閲覧・編集する
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
+
+;; 検索系
 ;; helm
 (use-package helm-config
   :config (helm-mode 1))
 ;; helm-ag helmを使った検索  silversearcher-agをinstallしないと使えない
 (use-package helm-ag)
-(setq helm-ag-base-command "ag --nocolor --nogrou")
+;; (setq helm-ag-base-command "ag --nocolor --nogrou")
+(setq helm-ag-base-command "rg --vimgrep --no-heading")
+;;; C-M-gはちょうどあいてる
+(global-set-key (kbd "C-c r") 'helm-ag)
+(global-set-key (kbd "C-M-k") 'backward-kill-sexp) ;推奨
 ;; (global-set-key (kbd "C-c s") 'helm-ag)
 
-;; helm-do-ag (helmがinstallされていれば使える)
+;; helm-do-ag (helmがinstallされていれば使える) (M-x helm do agとうつ)
+;; 現状これが一番使い勝手良し
 (global-set-key (kbd "C-c s") 'helm-do-ag)
+
+;; ripgrep
+(use-package ripgrep)
+(setq ripgrep-arguments '("-S"))
+;;;
