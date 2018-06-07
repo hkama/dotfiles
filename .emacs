@@ -1,3 +1,5 @@
+
+
 ;; use-packageのinstall(http://cachestocaches.com/2015/8/getting-started-use-package/より拝借)
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -97,9 +99,68 @@
 ;; spacemacs風の見た目にする
 (load-theme 'spacemacs-dark t)
 
+;; ewwのdefault検索をgoogleにする
+(setq eww-search-prefix "https://www.google.co.jp/search?q=")
+;; 普通のewwは背景が白っぽくなるので、白っぽくならないための設定
+(defvar eww-disable-colorize t)
+(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+  (unless eww-disable-colorize
+    (funcall orig start end fg)))
+(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
+(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
+(defun eww-disable-color ()
+  "eww で文字色を反映させない"
+  (interactive)
+  (setq-local eww-disable-colorize t)
+  (eww-reload))
+(defun eww-enable-color ()
+  "eww で文字色を反映させる"
+  (interactive)
+  (setq-local eww-disable-colorize nil)
+  (eww-reload))
+;; high lighting search result
+(defun eww-search (term)
+  (interactive "sSearch terms: ")
+  (setq eww-hl-search-word term)
+  (eww-browse-url (concat eww-search-prefix term)))
+(add-hook 'eww-after-render-hook (lambda ()
+                   (highlight-regexp eww-hl-search-word)
+                   (setq eww-hl-search-word nil)))
 
 
+;; flycheck
+(add-hook 'after-init-hook #'global-flycheck-mode)
+;; (when (require 'flycheck nil 'noerror)
+;;   (custom-set-variables
+;;    ;; エラーをポップアップで表示
+;;    '(flycheck-display-errors-function
+;;      (lambda (errors)
+;;        (let ((messages (mapcar #'flycheck-error-message errors)))
+;;          (popup-tip (mapconcat 'identity messages "\n")))))
+;;    '(flycheck-display-errors-delay 0.5))
+;;   (define-key flycheck-mode-map (kbd "C-M-n") 'flycheck-next-error)
+;;   (define-key flycheck-mode-map (kbd "C-M-p") 'flycheck-previous-error)
+;;   (add-hook 'c-mode-common-hook 'flycheck-mode))
 
+;; yasnippet
+;; M-x yas-describe-tablesで現在展開できるテンプレートを表示できる
+;; yasnippet-snippetsでsnippets群を入れて使う
+(use-package yasnippet)
+(yas-global-mode 1)
+;; 既存スニペットを挿入する
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+;; 新規スニペットを作成するバッファを用意する
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
+;; 既存スニペットを閲覧・編集する
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
+;; helm
+(use-package helm-config
+  :config (helm-mode 1))
+;; helm-ag helmを使った検索  silversearcher-agをinstallしないと使えない
+(use-package helm-ag)
+(setq helm-ag-base-command "ag --nocolor --nogrou")
+;; (global-set-key (kbd "C-c s") 'helm-ag)
 
-
+;; helm-do-ag (helmがinstallされていれば使える)
+(global-set-key (kbd "C-c s") 'helm-do-ag)
