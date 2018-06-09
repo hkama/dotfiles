@@ -155,23 +155,75 @@
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
 
-;; 検索系
 ;; helm
-(use-package helm-config
-  :config (helm-mode 1))
-;; helm-ag helmを使った検索  silversearcher-agをinstallしないと使えない
-(use-package helm-ag)
-;; (setq helm-ag-base-command "ag --nocolor --nogrou")
-(setq helm-ag-base-command "rg --vimgrep --no-heading")
-;;; C-M-gはちょうどあいてる
-(global-set-key (kbd "C-c r") 'helm-ag)
-(global-set-key (kbd "C-M-k") 'backward-kill-sexp) ;推奨
-;; (global-set-key (kbd "C-c s") 'helm-ag)
-;; helm-do-ag (helmがinstallされていれば使える) (M-x helm do agとうつ)
-;; (global-set-key (kbd "C-c s") 'helm-do-ag)
+(require 'helm)
+(require 'helm-config)
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+(defun spacemacs//helm-hide-minibuffer-maybe ()
+  "Hide minibuffer in Helm session if we use the header line as input field."
+  (when (with-helm-buffer helm-echo-input-in-header-line)
+    (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+      (overlay-put ov 'window (selected-window))
+      (overlay-put ov 'face
+                   (let ((bg-color (face-background 'default nil)))
+                     `(:background ,bg-color :foreground ,bg-color)))
+      (setq-local cursor-type nil))))
+(add-hook 'helm-minibuffer-set-up-hook
+          'spacemacs//helm-hide-minibuffer-maybe)
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+(helm-autoresize-mode 1)
+(helm-mode 1)
+;; ==========================================================================================================
+;; 上に書いた設定にて、prefixがC-c hとされていて、
+;; C-c h /でhelm-find(Unixのfindコマンド)
+;; C-c h iでhelm-semantic-or-imenu (Imenuはいろいろな定義を探す方法を提供します. たとえば関数定義とか変数定義)
+;; beginning-of-defun(C-M-a)とend-of-defun(C-M-e)を使えます(関数の前後に飛べて便利)
+;; 検索listでtabを押すと、そこまで飛んでくれる。C-mすればそこに着地、C-gすると、検索を始めた時点に戻ってくれる。
+;; ==========================================================================================================
+;; キルリングを見やすい形式で表示してくれて, かつpatternsで絞り込みが出来るようになる
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+;; helm-mini
+;; helm-miniはpatternsに@を前置することで, バッファ名ではなくバッファの内容で絞り込むこともできます.
+;; 例えば, testという文字を含んだバッファを絞り込みたければpatternsを@testとすればよいのです. さらにそのバッファ内の何行目にtestという文字が含まれているのかが知りたければ, C-sと入力します. すると, helm-miniセッションはhelm-moccurにスイッチされ, 候補が表示されます.
+(global-set-key (kbd "C-x b") 'helm-mini)
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+;; helm find file
+;; C-lでひとつ上のディレクトリに移動できます. C-rで戻れます.
+;; C-sでgrepっぽいことができます. C-u C-sでrecursive grepです. 
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; helm-man-woman
+;; C-c h mでmanを即座に検索
+;; helm-occur
+;; カレントバッファ内でpatternと一致する行を列挙してくれます
+(global-set-key (kbd "C-c h o") 'helm-occur)
+;; helm-apropos Helmのコマンド・関数・変数などなどEmacsのありとあらゆるオブジェクトのマニュアルを参照するコマンド
+;; C-c h a
+
 
 ;; ripgrep 現状ripgrepが検索最強
 (use-package ripgrep)
 (setq ripgrep-arguments '("-S"))
 (global-set-key (kbd "C-c s") 'ripgrep-regexp)
+
+;; helm M-x
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+
 ;;;
