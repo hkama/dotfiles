@@ -167,12 +167,11 @@
 (global-set-key (kbd "C-c r") 'helm-ag)
 (global-set-key (kbd "C-M-k") 'backward-kill-sexp) ;推奨
 ;; (global-set-key (kbd "C-c s") 'helm-ag)
-
 ;; helm-do-ag (helmがinstallされていれば使える) (M-x helm do agとうつ)
-;; 現状これが一番使い勝手良し
-(global-set-key (kbd "C-c s") 'helm-do-ag)
+;; (global-set-key (kbd "C-c s") 'helm-do-ag)
 
-;; ripgrep
+;; ripgrep 現状ripgrepが検索最強
 (use-package ripgrep)
 (setq ripgrep-arguments '("-S"))
+(global-set-key (kbd "C-c s") 'ripgrep-regexp)
 ;;;
