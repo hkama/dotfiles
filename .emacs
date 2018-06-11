@@ -240,4 +240,16 @@ scroll-step 1)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
 
+;; undo-tree
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode t))
+
+;; helm-projectile
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+;; C-c p f ファイル表示
+;; プロジェクト内のファイルにGrep(helm-projectile-grep、C-c p s g
+
 ;;;
