@@ -1,12 +1,29 @@
 ;;;
 
+;; M-f 	forward-word 	次の単語へ移動
+;; M-b 	backward-word 	前の単語に移動
+;; M-d 	kill-word 	単語を削除
+;; M-@ 	mark-word 	前の単語をマーク
+;; M-a 	backward-sentence 	前の文に移動
+;; M-e 	forward-sentence 	次の文に移動
+;; M-k 	kill-sentence 	文を削除
+;; M-z 	zap-to-char 	指定した文字まで削除 参考
+;; M-SPC 	just-one-space 	連続したスペースを一つにまとめる
+;; C-M-f 	forward-sexp 	次のS式へ移動
+;; C-M-b 	backward-sexp 	前のS式へ移動
+;; C-M-n 	forward-list 	次の括弧終わりに移動
+;; C-M-p 	backward-list 	前の括弧始まりに移動
+;; C-M-a 	c-beginning-of-defun 	関数定義の先頭に移動
+;; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
+;; C-M-h 	c-mark-function 	関数単位で選択
+
 ;; use-packageのinstall(http://cachestocaches.com/2015/8/getting-started-use-package/より拝借)
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-(package-initialize)
+(package-initialize)                    
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -26,26 +43,28 @@
 (global-set-key "\C-h" 'delete-backward-char)
 
 ;; copy&paste using clipboard
-(setq x-select-enable-clipboard t)
-
-(setq-default indent-tabs-mode nil)
-
-(if (display-graphic-p)
+(when (equal system-type 'gnu/linux)
+  (setq x-select-enable-clipboard t)
+  (setq-default indent-tabs-mode nil)
+  (if (display-graphic-p)
+      (progn
+        (setq x-select-enable-clipboard t)
+        (global-set-key "\C-y" 'x-clipboard-yank))
     (progn
-      (setq x-select-enable-clipboard t)
-      (global-set-key "\C-y" 'x-clipboard-yank))
-  (progn
-    (setq interprogram-paste-function
-	  #'(lambda () (shell-command-to-string "xsel -b -o")))
-    (setq interprogram-cut-function
-	  #'(lambda (text &optional rest)
-	      (let*
-		  ((process-connection-type nil)
-		   (proc (start-process "xsel" "*Messages*" "xsel" "-b" "-i")))
-		(process-send-string proc text)
-		(process-send-eof proc))))))
+      (setq interprogram-paste-function
+            #'(lambda () (shell-command-to-string "xsel -b -o")))
+      (setq interprogram-cut-function
+            #'(lambda (text &optional rest)
+                (let*
+                    ((process-connection-type nil)
+                     (proc (start-process "xsel" "*Messages*" "xsel" "-b" "-i")))
+                  (process-send-string proc text)
+                  (process-send-eof proc)))))))
 
-(setq scroll-step 1)
+;; scroll量調整
+(setq scroll-conservatively 35
+scroll-margin 0
+scroll-step 1) 
 
 ;; highlight
 (global-hl-line-mode t) ;; 現在行をハイライト
@@ -60,21 +79,18 @@
 (setq show-paren-style 'mixed)            ;; 括弧のハイライトの設定。
 (transient-mark-mode t)                   ;; 選択範囲をハイライト
 
-;;
 ;; volatile-highlights
-;;
-;; (require 'volatile-highlights)
-;; (volatile-highlights-mode t)
-
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
 
 ;; use markdown-mode for emacs
 ;; multimarkdownをinstallする必要がある
-(use-package markdown-mode
-  :ensure t
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+;; (use-package markdown-mode
+;;   :ensure t
+;;   :mode (("README\\.md\\'" . gfm-mode)
+;;          ("\\.md\\'" . markdown-mode)
+;;          ("\\.markdown\\'" . markdown-mode))
+;;   :init (setq markdown-command "multimarkdown"))
 
 ;; Japanese
 ;; uncommented by ueda. beacuse in shell buffer, they invokes mozibake
@@ -154,7 +170,6 @@
 ;; 既存スニペットを閲覧・編集する
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
-
 ;; helm
 (require 'helm)
 (require 'helm-config)
@@ -215,7 +230,6 @@
 (global-set-key (kbd "C-c h o") 'helm-occur)
 ;; helm-apropos Helmのコマンド・関数・変数などなどEmacsのありとあらゆるオブジェクトのマニュアルを参照するコマンド
 ;; C-c h a
-
 
 ;; ripgrep 現状ripgrepが検索最強
 (use-package ripgrep)
