@@ -252,4 +252,8 @@ scroll-step 1)
 ;; C-c p f ファイル表示
 ;; プロジェクト内のファイルにGrep(helm-projectile-grep、C-c p s g
 
+
+
+
+
 ;;;
