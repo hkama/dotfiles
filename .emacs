@@ -94,9 +94,10 @@ scroll-step 1)
 
 ;; Japanese
 ;; uncommented by ueda. beacuse in shell buffer, they invokes mozibake
-(set-language-environment 'Japanese)
-(prefer-coding-system 'utf-8)
-(setq enable-double-n-syntax t)
+
+;; (set-language-environment 'Japanese)
+;; (prefer-coding-system 'utf-8)
+;; (setq enable-double-n-syntax t)
 
 ;; 補完 company
 (use-package company

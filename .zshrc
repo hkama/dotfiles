@@ -1,7 +1,7 @@
 autoload -U compinit
 compinit
 
-PROMPT='%m:%c %n$ '
+PROMPT='%m:%c %n$'
 
 # 履歴ファイルの保存先
 export HISTFILE=${HOME}/.zhistory
@@ -97,3 +97,10 @@ export LANG=ja_JP.UTF-8
 
 # 同時に起動したzshの間でヒストリを共有
 setopt share_history
+
+export PATH="/home/kamada/anaconda3/bin:$PATH"
+
+# emacsのshellでの文字化け対策
+if [[ $TERM = dumb ]]; then
+  unset zle_bracketed_paste
+fi
