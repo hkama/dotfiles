@@ -1,7 +1,7 @@
 autoload -U compinit
 compinit
 
-PROMPT='%m:%c %n$'
+PROMPT='%m:%c %n$ '
 
 # 履歴ファイルの保存先
 export HISTFILE=${HOME}/.zhistory
@@ -104,3 +104,6 @@ export PATH="/home/kamada/anaconda3/bin:$PATH"
 if [[ $TERM = dumb ]]; then
   unset zle_bracketed_paste
 fi
+
+# 輝度調整
+xgamma -gamma 0.5
