@@ -1,5 +1,7 @@
 ;;;
 
+;; C-c C-hで現在のkey bindingsが確認できる
+
 ;; M-f 	forward-word 	次の単語へ移動
 ;; M-b 	backward-word 	前の単語に移動
 ;; M-d 	kill-word 	単語を削除
@@ -85,12 +87,16 @@ scroll-step 1)
 
 ;; use markdown-mode for emacs
 ;; multimarkdownをinstallする必要がある
-;; (use-package markdown-mode
-;;   :ensure t
-;;   :mode (("README\\.md\\'" . gfm-mode)
+;; C-c C-c v ブラウザでプレビュー
+;; C-c C-c l ewwでpreview
+;; C-c C-x Enterでbuffer内で整形表示
+(use-package markdown-mode
+  :ensure t
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 ;;          ("\\.md\\'" . markdown-mode)
-;;          ("\\.markdown\\'" . markdown-mode))
-;;   :init (setq markdown-command "multimarkdown"))
 
 ;; Japanese
 ;; uncommented by ueda. beacuse in shell buffer, they invokes mozibake

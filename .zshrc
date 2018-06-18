@@ -106,4 +106,4 @@ if [[ $TERM = dumb ]]; then
 fi
 
 # 輝度調整
-xgamma -gamma 0.5
+#xgamma -gamma 0.5
