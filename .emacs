@@ -120,6 +120,7 @@ scroll-step 1)
   (global-anzu-mode +1))
 
 ;; spacemacs風の見た目にする
+;; spacemacs-themeをinstall
 (load-theme 'spacemacs-dark t)
 
 ;; ewwのdefault検索をgoogleにする
@@ -259,8 +260,25 @@ scroll-step 1)
 ;; C-c p f ファイル表示
 ;; プロジェクト内のファイルにGrep(helm-projectile-grep、C-c p s g
 
+;; flymd
+;; flymd-flyitがコマンド
+(use-package flymd)
 
-
-
-
+;; magit  
+(use-package magit)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (magit yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode helm-projectile flymd flycheck diminish company anzu))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(global-set-key (kbd "C-x g") 'magit-status)
 ;;;
