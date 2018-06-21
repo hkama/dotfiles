@@ -154,17 +154,17 @@ scroll-step 1)
 
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
-;; (when (require 'flycheck nil 'noerror)
-;;   (custom-set-variables
-;;    ;; エラーをポップアップで表示
-;;    '(flycheck-display-errors-function
-;;      (lambda (errors)
-;;        (let ((messages (mapcar #'flycheck-error-message errors)))
-;;          (popup-tip (mapconcat 'identity messages "\n")))))
-;;    '(flycheck-display-errors-delay 0.5))
-;;   (define-key flycheck-mode-map (kbd "C-M-n") 'flycheck-next-error)
-;;   (define-key flycheck-mode-map (kbd "C-M-p") 'flycheck-previous-error)
-;;   (add-hook 'c-mode-common-hook 'flycheck-mode))
+(when (require 'flycheck nil 'noerror)
+  (custom-set-variables
+   ;; エラーをポップアップで表示
+   '(flycheck-display-errors-function
+     (lambda (errors)
+       (let ((messages (mapcar #'flycheck-error-message errors)))
+         (popup-tip (mapconcat 'identity messages "\n")))))
+   '(flycheck-display-errors-delay 0.5))
+  (define-key flycheck-mode-map (kbd "C-M-n") 'flycheck-next-error)
+  (define-key flycheck-mode-map (kbd "C-M-p") 'flycheck-previous-error)
+  (add-hook 'c-mode-common-hook 'flycheck-mode))
 
 ;; yasnippet
 ;; M-x yas-describe-tablesで現在展開できるテンプレートを表示できる
@@ -261,8 +261,8 @@ scroll-step 1)
 ;; プロジェクト内のファイルにGrep(helm-projectile-grep、C-c p s g
 
 ;; flymd
-;; flymd-flyitがコマンド
 (use-package flymd)
+(global-set-key (kbd "C-c f") 'flymd-flyit)
 
 ;; magit  
 (use-package magit)
@@ -280,5 +280,5 @@ scroll-step 1)
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c g") 'magit-status)
 ;;;
