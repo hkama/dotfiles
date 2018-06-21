@@ -264,7 +264,7 @@ scroll-step 1)
 (use-package flymd)
 (global-set-key (kbd "C-c f") 'flymd-flyit)
 
-;; magit  
+;; magit
 (use-package magit)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -281,4 +281,21 @@ scroll-step 1)
  ;; If there is more than one, they won't work right.
  )
 (global-set-key (kbd "C-c g") 'magit-status)
+
+;; hydra
+(use-package hydra)
+(global-set-key
+ (kbd "C-z")
+ (defhydra hydra-move ()
+   "move"
+   ("f" forward-char "right")
+   ("b" backward-char "left")
+   ("n" next-line "down")
+   ("p" previous-line "up")
+   ("SPC" scroll-up-command "down")
+   ("<backspace>" scroll-down-command "up")
+   ("." hydra-repeat "repeat")))
+
+
+
 ;;;
