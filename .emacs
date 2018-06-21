@@ -296,6 +296,4 @@ scroll-step 1)
    ("<backspace>" scroll-down-command "up")
    ("." hydra-repeat "repeat")))
 
-
-
 ;;;
