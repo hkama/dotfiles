@@ -1,3 +1,4 @@
+
 ;;;
 
 ;; M-x describe-bindings
@@ -20,45 +21,70 @@
 ;; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
 ;; C-M-h 	c-mark-function 	関数単位で選択
 
+
+;; 高速化のための設定
+(setq gc-cons-threshold 64000000)
+(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold (* 10 800000)))) ;; restore after startup
 (setq inhibit-startup-screen t)
+;;; 右から左に読む言語に対応させないことで描画高速化
+(setq-default bidi-display-reordering nil)
+;;; splash screenを無効にする
+(setq inhibit-splash-screen t)
+;;; 同じ内容を履歴に記録しないようにする
+(setq history-delete-duplicates t)
+;;; ミニバッファ履歴を次回Emacs起動時にも保存する
+(savehist-mode 1)
+;;; 行番号・桁番号を表示する
+(line-number-mode 1)
+(column-number-mode 1)
 
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 4))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(straight-use-package 'use-package)
 
-(straight-use-package 'spacemacs-theme)
-(load-theme 'spacemacs-dark t)
-
-;; オプションなしで自動的にuse-packageをstraight.elにフォールバックする
-;; 本来は (use-package hoge :straight t) のように書く必要がある
-(setq straight-use-package-by-default t)
+;; straight or use-package
+(setq use-straight nil)
+(cond
+ (use-straight
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 4))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+  (straight-use-package 'use-package)
+  ;; オプションなしで自動的にuse-packageをstraight.elにフォールバックする
+  ;; 本来は (use-package hoge :straight t) のように書く必要がある
+  (setq straight-use-package-by-default t)
+  (straight-use-package 'spacemacs-theme)
+  (load-theme 'spacemacs-dark t)
+  )
+ (t
+  (package-initialize)
+  (eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (add-to-list 'load-path "~/.emacs.d/elpa/use-package-20180613.2219/")
+  (require 'use-package))
+  ;;(use-package diminish)
+  (use-package bind-key)
+  (require 'spacemacs-dark-theme)
+  (load-theme 'spacemacs-dark t)
+  ))
 
 ;; highlight
 (global-hl-line-mode t) ;; 現在行をハイライト
 (show-paren-mode t)                       ;; 対応する括弧をハイライト
 (setq show-paren-style 'mixed)            ;; 括弧のハイライトの設定。
 (transient-mark-mode t)                   ;; 選択範囲をハイライト
-;; volatile-highlights
-(use-package volatile-highlights)
-(volatile-highlights-mode t)
+(use-package volatile-highlights
+  :config (volatile-highlights-mode t))
 ;; scroll量調整
 (setq scroll-conservatively 35
-scroll-margin 0
-scroll-step 1) 
-
+      scroll-margin 0
+      scroll-step 1) 
 (global-set-key "\C-h" 'delete-backward-char)
-
-;;(use-package diminish)
-;;(use-package bind-key)
 
 (add-to-list 'load-path "~/.emacs.d/elisp")
 
@@ -91,48 +117,43 @@ scroll-step 1)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
   :config (setq markdown-command "multimarkdown"))
-
-;; 補完 company
-(use-package company
+(use-package company ;; 補完 company
   :config
   (global-company-mode) ; 全バッファで有効にする 
   (setq company-idle-delay 0) ; デフォルトは0.5
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   )
-
-;; 検索文字が何番目か教えてくれるanzu
-(use-package anzu
-  :config
-  (global-anzu-mode +1))
-
-;; ewwのdefault検索をgoogleにする
-(setq eww-search-prefix "https://www.google.co.jp/search?q=")
-;; 普通のewwは背景が白っぽくなるので、白っぽくならないための設定
-(defvar eww-disable-colorize t)
-(defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
-  (unless eww-disable-colorize
-    (funcall orig start end fg)))
-(advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
-(advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
-(defun eww-disable-color ()
-  "eww で文字色を反映させない"
-  (interactive)
-  (setq-local eww-disable-colorize t)
-  (eww-reload))
-(defun eww-enable-color ()
-  "eww で文字色を反映させる"
-  (interactive)
-  (setq-local eww-disable-colorize nil)
-  (eww-reload))
-;; high lighting search result
-(defun eww-search (term)
-  (interactive "sSearch terms: ")
-  (setq eww-hl-search-word term)
-  (eww-browse-url (concat eww-search-prefix term)))
-(add-hook 'eww-after-render-hook (lambda ()
-                   (highlight-regexp eww-hl-search-word)
-                   (setq eww-hl-search-word nil)))
+(use-package anzu ;; 検索文字が何番目か教えてくれるanzu
+  :config (global-anzu-mode +1))
+(with-eval-after-load 'eww
+  (setq eww-search-prefix "https://www.google.co.jp/search?q=")
+  ;; 普通のewwは背景が白っぽくなるので、白っぽくならないための設定
+  (defvar eww-disable-colorize t)
+  (defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+    (unless eww-disable-colorize
+      (funcall orig start end fg)))
+  (advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
+  (advice-add 'eww-colorize-region :around 'shr-colorize-region--disable)
+  (defun eww-disable-color ()
+    "eww で文字色を反映させない"
+    (interactive)
+    (setq-local eww-disable-colorize t)
+    (eww-reload))
+  (defun eww-enable-color ()
+    "eww で文字色を反映させる"
+    (interactive)
+    (setq-local eww-disable-colorize nil)
+    (eww-reload))
+  ;; high lighting search result
+  (defun eww-search (term)
+    (interactive "sSearch terms: ")
+    (setq eww-hl-search-word term)
+    (eww-browse-url (concat eww-search-prefix term)))
+  (add-hook 'eww-after-render-hook (lambda ()
+                                     (highlight-regexp eww-hl-search-word)
+                                     (setq eww-hl-search-word nil)))
+  )
 
 (use-package flycheck
   :config
@@ -162,7 +183,6 @@ scroll-step 1)
    ("C-x i v" . yas-visit-snippet-file);; 既存スニペットを閲覧・編集する
    ))
 
-;; helm
 (use-package helm
   :init
   (require 'helm)
