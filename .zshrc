@@ -106,7 +106,7 @@ if [[ $TERM = dumb ]]; then
 fi
 
 # 輝度調整
-xgamma -gamma 0.6
+xgamma -gamma 1.2
 
 
 alias emacs='emacs -nw'
