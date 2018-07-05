@@ -119,7 +119,11 @@
   :config (setq markdown-command "multimarkdown"))
 (use-package company ;; 補完 company
   :config
-  (global-company-mode) ; 全バッファで有効にする
+  ;; (global-company-mode) ; 全バッファで有効にする
+  (add-hook 'python-mode-hook 'company-mode)
+  (add-hook 'c++-mode-hook 'company-mode)
+  (add-hook 'markdown-mode-hook 'company-mode)
+  (add-hook 'gfm-mode-hook 'company-mode)
   (setq company-idle-delay 0) ; デフォルトは0.5
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
