@@ -357,8 +357,6 @@ _SPC_ cancel
 )
 (global-set-key (kbd "C-c @") 'hydra-hs/body)
 
-
-
 ;; ;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
