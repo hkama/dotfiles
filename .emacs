@@ -279,17 +279,13 @@
      ("b" backward-char)
      ("a" beginning-of-line)
      ("e" move-end-of-line)
+     ("r" move-end-of-line) ;; same with e
      ("v" scroll-up-command)
      ;; Converting M-v to V here by analogy.
      ("V" scroll-down-command)
      ("l" recenter-top-bottom))))
 
 (use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config
   (setq dumb-jump-selector 'helm) ;; (setq dumb-jump-selector 'ivy)
   (global-set-key
