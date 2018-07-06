@@ -62,6 +62,7 @@
   (load-theme 'spacemacs-dark t)
   )
  (t
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (package-initialize)
   (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
@@ -268,15 +269,68 @@
 (use-package hydra
   :config
   (global-set-key
-   (kbd "C-z")
-   (defhydra hydra-move ()
+   (kbd "C-n")
+   (defhydra hydra-move
+     (:body-pre (next-line))
      "move"
-     ("f" forward-char "right")
-     ("b" backward-char "left")
-     ("n" next-line "down")
-     ("p" previous-line "up")
-     ("SPC" scroll-up-command "down")
-     ("<backspace>" scroll-down-command "up")
-     ("." hydra-repeat "repeat"))))
+     ("n" next-line)
+     ("p" previous-line)
+     ("f" forward-char)
+     ("b" backward-char)
+     ("a" beginning-of-line)
+     ("e" move-end-of-line)
+     ("v" scroll-up-command)
+     ;; Converting M-v to V here by analogy.
+     ("V" scroll-down-command)
+     ("l" recenter-top-bottom))))
+
+(use-package dumb-jump
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config
+  (setq dumb-jump-selector 'helm) ;; (setq dumb-jump-selector 'ivy)
+  (global-set-key
+   (kbd "C-x j")
+   (defhydra dumb-jump-hydra (:color blue :columns 3)
+     "Dumb Jump"
+     ("j" dumb-jump-go "Go")
+     ("o" dumb-jump-go-other-window "Other window")
+     ("e" dumb-jump-go-prefer-external "Go external")
+     ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+     ("i" dumb-jump-go-prompt "Prompt")
+     ("l" dumb-jump-quick-look "Quick look")
+     ("b" dumb-jump-back "Back"))))
+
 
 ;; ;;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(flycheck-display-errors-delay 0.5)
+ '(flycheck-display-errors-function
+   (lambda
+     (errors)
+     (let
+         ((messages
+           (mapcar
+            (function flycheck-error-message)
+            errors)))
+       (popup-tip
+        (mapconcat
+         (quote identity)
+         messages "
+")))))
+ '(package-selected-packages
+   (quote
+    (dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd flycheck diminish company anzu))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
