@@ -62,7 +62,7 @@
   (load-theme 'spacemacs-dark t)
   )
  (t
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (package-initialize)
   (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
@@ -333,7 +333,7 @@
   ("k" occur-prev "Prev":color red)
   ("h" delete-window "Hide" :color blue)
   ("r" (reattach-occur) "Re-attach" :color red))
-(global-set-key (kbd "C-x o") 'hydra-occur-dwim/body)
+(global-set-key (kbd "C-c o") 'hydra-occur-dwim/body)
 
 (defhydra hydra-hs (:idle 1.0)
    "
