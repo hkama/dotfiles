@@ -21,7 +21,6 @@
 ;; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
 ;; C-M-h 	c-mark-function 	関数単位で選択
 
-
 ;; 高速化のための設定
 (setq gc-cons-threshold 64000000)
 (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold (* 10 800000)))) ;; restore after startup
@@ -38,6 +37,7 @@
 (line-number-mode 1)
 (column-number-mode 1)
 
+(add-to-list 'load-path "~/.emacs.d/elisp/")
 
 ;; straight or use-package
 (setq use-straight nil)
@@ -64,11 +64,16 @@
  (t
   ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (package-initialize)
+  (setq package-archives
+	'(("gnu" . "http://elpa.gnu.org/packages/")
+          ("melpa" . "http://melpa.org/packages/")))
+  ;;          ("org" . "http://orgmode.org/elpa/")))  
   (eval-when-compile
   ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (add-to-list 'load-path "~/.emacs.d/elpa/use-package-20180613.2219/")
-  (require 'use-package))
-  ;;(use-package diminish)
+    (add-to-list 'load-path "~/.emacs.d/elpa/use-package-20180613.2219/")
+    (require 'use-package)
+    )
+  ;;(Use-package diminish)
   (use-package bind-key)
   (require 'spacemacs-dark-theme)
   (load-theme 'spacemacs-dark t)
@@ -86,8 +91,6 @@
       scroll-margin 0
       scroll-step 1) 
 (global-set-key "\C-h" 'delete-backward-char)
-
-(add-to-list 'load-path "~/.emacs.d/elisp")
 
 ;; copy&paste using clipboard
 (when (equal system-type 'gnu/linux)
@@ -114,11 +117,13 @@
 ;; C-c C-c l ewwでpreview
 ;; C-c C-x Enterでbuffer内で整形表示
 (use-package markdown-mode
+  :ensure t     
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . gfm-mode)
          ("\\.markdown\\'" . markdown-mode))
   :config (setq markdown-command "multimarkdown"))
 (use-package company ;; 補完 company
+  :ensure t     
   :config
   ;; (global-company-mode) ; 全バッファで有効にする
   (add-hook 'python-mode-hook 'company-mode)
@@ -130,6 +135,7 @@
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   )
 (use-package anzu ;; 検索文字が何番目か教えてくれるanzu
+  :ensure t     
   :config (global-anzu-mode +1))
 (with-eval-after-load 'eww
   (setq eww-search-prefix "https://www.google.co.jp/search?q=")
@@ -161,6 +167,7 @@
   )
 
 (use-package flycheck
+  :ensure t     
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
   (when (require 'flycheck nil 'noerror)
@@ -179,6 +186,7 @@
 ;; M-x yas-describe-tablesで現在展開できるテンプレートを表示できる
 ;; yasnippet-snippetsでsnippets群を入れて使う
 (use-package yasnippet
+  :ensure t     
   :config
   (yas-global-mode 1)
   :bind
@@ -189,6 +197,7 @@
    ))
 
 (use-package helm
+  :ensure t     
   :init
   (require 'helm)
   (require 'helm-config)
@@ -251,11 +260,14 @@
 ;; ==========================================================================================================
 
 (use-package ripgrep
+  :ensure t     
   :config (setq ripgrep-arguments '("-S"))
   :bind ("C-c s" . ripgrep-regexp))
 (use-package undo-tree
+  :ensure t     
   :config (global-undo-tree-mode t))
 (use-package helm-projectile
+  :ensure t     
   :config
   (projectile-global-mode)
   (setq projectile-completion-system 'helm)
@@ -263,10 +275,13 @@
 ;; C-c p f ファイル表示
 ;; プロジェクト内のファイルにGrep(helm-projectile-grep、C-c p s g
 (use-package flymd
+  :ensure t     
   :bind ("C-c f" . flymd-flyit))
 (use-package magit
+  :ensure t     
   :bind ("C-c g" . magit-status))
 (use-package hydra
+  :ensure t     
   :config
   (global-set-key
    (kbd "C-n")
@@ -286,6 +301,7 @@
      ("l" recenter-top-bottom))))
 
 (use-package dumb-jump
+  :ensure t     
   :config
   (setq dumb-jump-selector 'helm) ;; (setq dumb-jump-selector 'ivy)
   (global-set-key
@@ -368,14 +384,14 @@ _SPC_ cancel
    (lambda
      (errors)
      (let
-         ((messages
-           (mapcar
-            (function flycheck-error-message)
-            errors)))
+	 ((messages
+	   (mapcar
+	    (function flycheck-error-message)
+	    errors)))
        (popup-tip
-        (mapconcat
-         (quote identity)
-         messages "
+	(mapconcat
+	 (quote identity)
+	 messages "
 ")))))
  '(package-selected-packages
    (quote
