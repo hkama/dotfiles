@@ -21,6 +21,17 @@
 ;; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
 ;; C-M-h 	c-mark-function 	関数単位で選択
 
+;; copy & paste for mac
+(when (equal system-type 'darwin)
+  (defun copy-from-osx ()
+    (shell-command-to-string "pbpaste"))
+  (defun paste-to-osx (text &optional push)
+    (let ((process-connection-type nil))
+      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+	(process-send-string proc text)
+	(process-send-eof proc))))
+  (setq interprogram-cut-function 'paste-to-osx)
+  (setq interprogram-paste-function 'copy-from-osx))
 ;; 高速化のための設定
 (setq gc-cons-threshold 64000000)
 (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold (* 10 800000)))) ;; restore after startup
@@ -36,6 +47,20 @@
 ;;; 行番号・桁番号を表示する
 (line-number-mode 1)
 (column-number-mode 1)
+;; スクロールの加速をやめる
+(setq mouse-wheel-progressive-speed nil)
+;; メニューバーを非表示
+(menu-bar-mode 0)
+;;current directory 表示
+(let ((ls (member 'mode-line-buffer-identification
+                  mode-line-format)))
+  (setcdr ls
+    (cons '(:eval (concat " ("
+            (abbreviate-file-name default-directory)
+            ")"))
+            (cdr ls))))
+;; scratchの初期メッセージ消去
+(setq initial-scratch-message "")
 
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
@@ -315,6 +340,18 @@
      ("i" dumb-jump-go-prompt "Prompt")
      ("l" dumb-jump-quick-look "Quick look")
      ("b" dumb-jump-back "Back"))))
+
+(use-package helm-gtags
+  :ensure t
+  :config
+  (helm-gtags-mode t)
+  :bind (
+	 ("M-t" . helm-gtags-find-tag)
+	 ("M-r" . helm-gtags-find-rtag) ;; 入力タグを参照する場所へジャンプ
+	 ("M-s" . helm-gtags-find-symbol) ;; 入力したシンボルへ
+	 ("C-t" . helm-gtags-pop-stack))
+  )
+
 
 ;; abo-abo occur-dwim
 (defun occur-dwim ()
