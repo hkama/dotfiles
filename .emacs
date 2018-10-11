@@ -1,4 +1,4 @@
-
+;; 
 ;;;
 
 ;; M-x describe-bindings
@@ -284,6 +284,18 @@
 ;; 検索listでtabを押すと、そこまで飛んでくれる。C-mすればそこに着地、C-gすると、検索を始めた時点に戻ってくれる。
 ;; ==========================================================================================================
 
+(use-package migemo
+  :ensure t
+  :config
+  (setq migemo-command "cmigemo")
+  (setq migemo-options '("-q" "--emacs"))
+  ;; Set your installed path
+  (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
+  (setq migemo-user-dictionary nil)
+  (setq migemo-regex-dictionary nil)
+  (setq migemo-coding-system 'utf-8-unix)
+  (migemo-init)
+  )
 (use-package ripgrep
   :ensure t     
   :config (setq ripgrep-arguments '("-S"))
@@ -410,6 +422,11 @@ _SPC_ cancel
 )
 (global-set-key (kbd "C-c @") 'hydra-hs/body)
 
+(use-package avy
+  :ensure t 
+  :config
+  (global-set-key (kbd "C-c a") 'avy-goto-char-timer)
+  )
 ;; ;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -432,7 +449,7 @@ _SPC_ cancel
 ")))))
  '(package-selected-packages
    (quote
-    (dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd flycheck diminish company anzu))))
+    (avy migemo dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd flycheck diminish company anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
