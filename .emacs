@@ -166,7 +166,7 @@
   ;;(Use-package diminish)
   (use-package bind-key)
   (require 'spacemacs-dark-theme)
-  (load-theme 'spacemacs-dark t)
+  (load-theme 'spacemacs-dark t)  
   ))
 
 ;; highlight
