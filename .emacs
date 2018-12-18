@@ -21,6 +21,71 @@
 ;; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
 ;; C-M-h 	c-mark-function 	関数単位で選択
 
+;; read only hook
+(add-hook 'find-file-hook (lambda ()
+			    (setq buffer-read-only nil)
+			    ))
+
+(setq package-check-signature nil)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
+;; svmw setting
+;; with indent tabs mode t
+(setq default-tab-width 4)
+(add-hook 'c-mode-hook (setq c-basic-offset 4))
+(add-hook 'c++-mode-hook (setq c-basic-offset 4))
+;; (set-face-attribute 'default nil :height 40)
+(set-face-attribute 'default nil :family "Hoge" :height 40)
+
+(defun window-resizer ()
+  "Control window size and position."
+  (interactive)
+  (let ((window-obj (selected-window))
+        (current-width (window-width))
+        (current-height (window-height))
+        (dx (if (= (nth 0 (window-edges)) 0) 1
+              -1))
+        (dy (if (= (nth 1 (window-edges)) 0) 1
+              -1))
+        action c)
+    (catch 'end-flag
+      (while t
+        (setq action
+              (read-key-sequence-vector (format "size[%dx%d]"
+                                                (window-width)
+                                                (window-height))))
+        (setq c (aref action 0))
+        (cond ((= c ?l)
+               (enlarge-window-horizontally dx))
+              ((= c ?h)
+               (shrink-window-horizontally dx))
+              ((= c ?j)
+               (enlarge-window dy))
+              ((= c ?k)
+               (shrink-window dy))
+              ;; otherwise
+              (t
+               (let ((last-command-char (aref action 0))
+                     (command (key-binding action)))
+                 (when command
+                   (call-interactively command)))
+               (message "Quit")
+               (throw 'end-flag t)))))))
+(global-set-key "\C-c\C-r" 'window-resizer)
+
+
+(defun scroll-up-in-place (n)
+  (interactive "p")
+  (previous-line n)
+  (scroll-down n))
+
+(defun scroll-down-in-place (n)
+  (interactive "p")
+  (next-line n)
+  (scroll-up n))
+
+
 ;; copy & paste for mac
 (when (equal system-type 'darwin)
   (defun copy-from-osx ()
@@ -109,8 +174,8 @@
 (show-paren-mode t)                       ;; 対応する括弧をハイライト
 (setq show-paren-style 'mixed)            ;; 括弧のハイライトの設定。
 (transient-mark-mode t)                   ;; 選択範囲をハイライト
-(use-package volatile-highlights
-  :config (volatile-highlights-mode t))
+;; (use-package volatile-highlights
+;;   :config (volatile-highlights-mode t))
 ;; scroll量調整
 (setq scroll-conservatively 35
       scroll-margin 0
@@ -120,7 +185,7 @@
 ;; copy&paste using clipboard
 (when (equal system-type 'gnu/linux)
   (setq x-select-enable-clipboard t)
-  (setq-default indent-tabs-mode nil)
+  (setq-default indent-tabs-mode t)
   (if (display-graphic-p)
       (progn
         (setq x-select-enable-clipboard t)
@@ -322,20 +387,64 @@
   :config
   (global-set-key
    (kbd "C-n")
-   (defhydra hydra-move
+   (defhydra hydra-move-down
      (:body-pre (next-line))
      "move"
      ("n" next-line)
      ("p" previous-line)
      ("f" forward-char)
      ("b" backward-char)
+     ("o" other-window)
+     ("0" delete-window)
+     ("1" delete-other-windows)
+     ("2" split-window-below)
+     ("3" split-window-right)
+     ("h" (backward-char 2))
+     ("l" (forward-char 2))
+     ("j" (scroll-down-in-place 3))
+     ("k" (scroll-up-in-place 3))
      ("a" beginning-of-line)
      ("e" move-end-of-line)
-     ("r" move-end-of-line) ;; same with e
+     ("r" helm-gtags-find-rtag)
+     ("u" helm-gtags-dwim)
+     ("m" helm-gtags-pop-stack)
+     ("s" helm-gtags-find-symbol)
+     ("t" helm-gtags-find-tag)
+     ("c" ripgrep-regexp)
      ("v" scroll-up-command)
      ;; Converting M-v to V here by analogy.
      ("V" scroll-down-command)
-     ("l" recenter-top-bottom))))
+     ))
+  (global-set-key
+   (kbd "C-p")
+   (defhydra hydra-move-up
+     (:body-pre (previous-line))
+     "move"
+     ("n" next-line)
+     ("p" previous-line)
+     ("f" forward-char)
+     ("h" (backward-char 2))
+     ("l" (forward-char 2))
+     ("j" (scroll-down-in-place 3))
+     ("k" (scroll-up-in-place 3))
+     ("o" other-window)
+     ("0" delete-window)
+     ("1" delete-other-windows)
+     ("2" split-window-below)
+     ("3" split-window-right)
+     ("b" backward-char)
+     ("a" beginning-of-line)
+     ("e" move-end-of-line)
+     ("r" helm-gtags-find-rtag)
+     ("u" helm-gtags-dwim)
+     ("m" helm-gtags-pop-stack)
+     ("s" helm-gtags-find-symbol)
+     ("t" helm-gtags-find-tag)
+     ("c" ripgrep-regexp)
+     ("v" scroll-up-command)
+     ;; Converting M-v to V here by analogy.
+     ("V" scroll-down-command)
+     )))
 
 (use-package dumb-jump
   :ensure t     
@@ -427,6 +536,13 @@ _SPC_ cancel
   :config
   (global-set-key (kbd "C-c a") 'avy-goto-char-timer)
   )
+
+(use-package desktop
+  :ensure t
+  :config
+  (setq desktop-save-mode 1)  
+  )
+
 ;; ;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -436,20 +552,20 @@ _SPC_ cancel
  '(flycheck-display-errors-delay 0.5)
  '(flycheck-display-errors-function
    (lambda
-     (errors)
-     (let
-	 ((messages
-	   (mapcar
-	    (function flycheck-error-message)
-	    errors)))
-       (popup-tip
-	(mapconcat
-	 (quote identity)
-	 messages "
+	 (errors)
+	 (let
+		 ((messages
+		   (mapcar
+			(function flycheck-error-message)
+			errors)))
+	   (popup-tip
+		(mapconcat
+		 (quote identity)
+		 messages "
 ")))))
  '(package-selected-packages
    (quote
-    (avy migemo dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd flycheck diminish company anzu))))
+	(shell-here avy migemo dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd flycheck diminish company anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
