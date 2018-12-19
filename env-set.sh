@@ -9,9 +9,9 @@ sudo http_proxy=${HTTP_PROXY} https_proxy=${HTTP_PROXY} add-apt-repository ppa:u
 sudo http_proxy=${HTTP_PROXY} https_proxy=${HTTP_PROXY} apt-get update
 sudo http_proxy=${HTTP_PROXY} https_proxy=${HTTP_PROXY} apt-get install emacs25 cmigemo kazam
 sudo http_proxy=${HTTP_PROXY} https_proxy=${HTTP_PROXY} update-alternatives --config emacs
+sudo http_proxy=$HTTP_PROXY apt install python-pip
 
 sudo apt -o Acquire::http::proxy=$HTTP_PROXY install xsel
-
 
 
 
