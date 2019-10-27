@@ -1,28 +1,28 @@
-;; 
-;;;
+;;
+;; ;
 
-;; M-x describe-bindings
-;; C-c C-hで現在のkey bindingsが確認できる
+; ; M-x describe-bindings
+; ; C-c C-hで現在のkey bindingsが確認できる
 
-;; M-f 	forward-word 	次の単語へ移動
-;; M-b 	backward-word 	前の単語に移動
-;; M-d 	kill-word 	単語を削除
-;; M-@ 	mark-word 	前の単語をマーク
-;; M-a 	backward-sentence 	前の文に移動
-;; M-e 	forward-sentence 	次の文に移動
-;; M-k 	kill-sentence 	文を削除
-;; M-z 	zap-to-char 	指定した文字まで削除 参考
-;; M-SPC 	just-one-space 	連続したスペースを一つにまとめる
-;; C-M-f 	forward-sexp 	次のS式へ移動
-;; C-M-b 	backward-sexp 	前のS式へ移動
-;; C-M-n 	forward-list 	次の括弧終わりに移動
-;; C-M-p 	backward-list 	前の括弧始まりに移動
-;; C-M-a 	c-beginning-of-defun 	関数定義の先頭に移動
-;; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
-;; C-M-h 	c-mark-function 	関数単位で選択
+; ; M-f 	forward-word 	次の単語へ移動
+; ; M-b 	backward-word 	前の単語に移動
+; ; M-d 	kill-word 	単語を削除
+; ; M-@ 	mark-word 	前の単語をマーク
+; ; M-a 	backward-sentence 	前の文に移動
+; ; M-e 	forward-sentence 	次の文に移動
+; ; M-k 	kill-sentence 	文を削除
+; ; M-z 	zap-to-char 	指定した文字まで削除 参考
+; ; M-SPC 	just-one-space 	連続したスペースを一つにまとめる
+; ; C-M-f 	forward-sexp 	次のS式へ移動
+; ; C-M-b 	backward-sexp 	前のS式へ移動
+; ; C-M-n 	forward-list 	次の括弧終わりに移動
+; ; C-M-p 	backward-list 	前の括弧始まりに移動
+; ; C-M-a 	c-beginning-of-defun 	関数定義の先頭に移動
+; ; C-M-e 	c-end-of-defun 	関数定義の終わりに移動
+; ; C-M-h 	c-mark-function 	関数単位で選択
 
-;; read only hook
-(add-hook 'find-file-hook (lambda ()
+; ; read only hook
+(add-hook 'find-file-hook(lambda ()
 			    (setq buffer-read-only nil)
 			    ))
 
@@ -30,44 +30,43 @@
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 
-;; svmw setting
-;; with indent tabs mode t
-(setq default-tab-width 4)
-(add-hook 'c-mode-hook (setq c-basic-offset 4))
-(add-hook 'c++-mode-hook (setq c-basic-offset 4))
-;; (set-face-attribute 'default nil :height 40)
-(set-face-attribute 'default nil :family "Hoge" :height 40)
+;; ; ; svmw setting
+;; ; ; with indent tabs mode t
+;; ; ; (setq default-tab-width 4)
+;; ; ; (add-hook 'c-mode-hook (setq c-basic-offset 4))
+;; ; ; (add-hook 'c++-mode-hook (setq c-basic-offset 4))
+;; ;; (set-face-attribute 'default nil : height 40)
+; (set-face-attribute 'default nil: family "Hoge": height 40)
 
-(defun window-resizer ()
+(defun window-resizer()
   "Control window size and position."
   (interactive)
-  (let ((window-obj (selected-window))
-        (current-width (window-width))
-        (current-height (window-height))
-        (dx (if (= (nth 0 (window-edges)) 0) 1
-              -1))
-        (dy (if (= (nth 1 (window-edges)) 0) 1
-              -1))
+  (let((window-obj(selected-window))
+        (current-width(window-width))
+        (current-height(window-height))
+        (dx(if (=(nth 0 (window-edges)) 0) 1
+              - 1))
+        (dy(if (=(nth 1 (window-edges)) 0) 1
+              - 1))
         action c)
     (catch 'end-flag
       (while t
         (setq action
-              (read-key-sequence-vector (format "size[%dx%d]"
+              (read-key-sequence-vector(format "size[%dx%d]"
                                                 (window-width)
                                                 (window-height))))
-        (setq c (aref action 0))
-        (cond ((= c ?l)
+        (setq c(aref action 0))
+        (cond((=c ?l)
                (enlarge-window-horizontally dx))
-              ((= c ?h)
+              ((=c ?h)
                (shrink-window-horizontally dx))
-              ((= c ?j)
+              ((=c ?j)
                (enlarge-window dy))
-              ((= c ?k)
-               (shrink-window dy))
-              ;; otherwise
+              ((=c ?k)
+               (shrink-window dy));; otherwise
               (t
-               (let ((last-command-char (aref action 0))
-                     (command (key-binding action)))
+               (let((last-command-char(aref action 0))
+                     (command(key-binding action)))
                  (when command
                    (call-interactively command)))
                (message "Quit")
@@ -75,163 +74,166 @@
 (global-set-key "\C-c\C-r" 'window-resizer)
 
 
-(defun scroll-up-in-place (n)
+(defun scroll-up-in-place(n)
   (interactive "p")
   (previous-line n)
   (scroll-down n))
 
-(defun scroll-down-in-place (n)
+(defun scroll-down-in-place(n)
   (interactive "p")
   (next-line n)
   (scroll-up n))
 
 
-;; copy & paste for mac
-(when (equal system-type 'darwin)
-  (defun copy-from-osx ()
+; ; copy & paste for mac
+(when(equal system-type 'darwin)
+  (defun copy-from-osx()
     (shell-command-to-string "pbpaste"))
-  (defun paste-to-osx (text &optional push)
-    (let ((process-connection-type nil))
-      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+  (defun paste-to-osx(text & optional push)
+    (let((process-connection-type nil))
+      (let((proc(start-process "pbcopy" "*Messages*" "pbcopy")))
 	(process-send-string proc text)
 	(process-send-eof proc))))
   (setq interprogram-cut-function 'paste-to-osx)
   (setq interprogram-paste-function 'copy-from-osx))
-;; 高速化のための設定
+; ; 高速化のための設定
 (setq gc-cons-threshold 64000000)
-(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold (* 10 800000)))) ;; restore after startup
+(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold (* 10 800000))));; restore after startup
 (setq inhibit-startup-screen t)
-;;; 右から左に読む言語に対応させないことで描画高速化
+;; ; 右から左に読む言語に対応させないことで描画高速化
 (setq-default bidi-display-reordering nil)
-;;; splash screenを無効にする
+;; ; splash screenを無効にする
 (setq inhibit-splash-screen t)
-;;; 同じ内容を履歴に記録しないようにする
+;; ; 同じ内容を履歴に記録しないようにする
 (setq history-delete-duplicates t)
-;;; ミニバッファ履歴を次回Emacs起動時にも保存する
+;; ; ミニバッファ履歴を次回Emacs起動時にも保存する
 (savehist-mode 1)
-;;; 行番号・桁番号を表示する
+;; ; 行番号・桁番号を表示する
 (line-number-mode 1)
 (column-number-mode 1)
-;; スクロールの加速をやめる
+; ; スクロールの加速をやめる
 (setq mouse-wheel-progressive-speed nil)
-;; メニューバーを非表示
+; ; メニューバーを非表示
 (menu-bar-mode 0)
-;;current directory 表示
-(let ((ls (member 'mode-line-buffer-identification
+;; current directory 表示
+(let((ls(member 'mode-line-buffer-identification
                   mode-line-format)))
   (setcdr ls
-    (cons '(:eval (concat " ("
+    (cons '(: eval(concat " ("
             (abbreviate-file-name default-directory)
             ")"))
             (cdr ls))))
-;; scratchの初期メッセージ消去
+; ; scratchの初期メッセージ消去
 (setq initial-scratch-message "")
+
+; ; comment out
+(defun toggle-comment-on-line()
+  "comment or uncomment current line"
+  (interactive)
+  (comment-or-uncomment-region(line-beginning-position)(line-end-position)))
+(defun rough-comment (bg ed)
+  "ざっくりとコメントアウト（解除）します。"
+  (interactive (list (point) (mark)))
+  (if (not mark-active)
+      (save-excursion
+        (comment-or-uncomment-region (progn (beginning-of-line) (point))
+                                     (progn (end-of-line) (point))))
+    (save-excursion
+      (comment-or-uncomment-region
+       (progn (goto-char (if (< bg ed) bg ed)) (beginning-of-line) (point))
+       (progn (goto-char (if (< bg ed) ed bg)) (end-of-line) (point))))))
+(global-set-key(kbd "C-x @ c ;") 'rough-comment)
 
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
-;; straight or use-package
+; ; straight or use-package
 (setq use-straight nil)
 (cond
  (use-straight
-  (let ((bootstrap-file
+  (let((bootstrap-file
          (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
         (bootstrap-version 4))
-    (unless (file-exists-p bootstrap-file)
+    (unless(file-exists-p bootstrap-file)
       (with-current-buffer
           (url-retrieve-synchronously
            "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
            'silent 'inhibit-cookies)
-        (goto-char (point-max))
+        (goto-char(point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-  (straight-use-package 'use-package)
-  ;; オプションなしで自動的にuse-packageをstraight.elにフォールバックする
-  ;; 本来は (use-package hoge :straight t) のように書く必要がある
+  (straight-use-package 'use-package);; オプションなしで自動的にuse-packageをstraight.elにフォールバックする
+  ;; 本来は (use-package hoge : straight t) のように書く必要がある
   (setq straight-use-package-by-default t)
   (straight-use-package 'spacemacs-theme)
   (load-theme 'spacemacs-dark t)
   )
- (t
-  ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+ (t;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (package-initialize)
   (setq package-archives
 	'(("gnu" . "http://elpa.gnu.org/packages/")
-          ("melpa" . "http://melpa.org/packages/")))
-  ;;          ("org" . "http://orgmode.org/elpa/")))  
-  (eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+          ("melpa" . "http://melpa.org/packages/"))); ;          ("org" . "http://orgmode.org/elpa/")))
+  (eval-when-compile;; Following line is not needed if use-package.el is in ~/.emacs.d
     (add-to-list 'load-path "~/.emacs.d/elpa/use-package-20180613.2219/")
     (require 'use-package)
     )
-  ;;(Use-package diminish)
+  ;; (Use-package diminish)
   (use-package bind-key)
   (require 'spacemacs-dark-theme)
-  (load-theme 'spacemacs-dark t)  
-  ))
-
-;; highlight
-(global-hl-line-mode t) ;; 現在行をハイライト
-(show-paren-mode t)                       ;; 対応する括弧をハイライト
-(setq show-paren-style 'mixed)            ;; 括弧のハイライトの設定。
-(transient-mark-mode t)                   ;; 選択範囲をハイライト
-;; (use-package volatile-highlights
-;;   :config (volatile-highlights-mode t))
-;; scroll量調整
+  (load-theme 'spacemacs-dark t)
+  )); ; highlight
+(global-hl-line-mode t);; 現在行をハイライト
+(show-paren-mode t);; 対応する括弧をハイライト
+(setq show-paren-style 'mixed);; 括弧のハイライトの設定。
+(transient-mark-mode t);; 選択範囲をハイライト
+; ; (use-package volatile-highlights
+;;   : config (volatile-highlights-mode t))
+; ; scroll量調整
 (setq scroll-conservatively 35
       scroll-margin 0
-      scroll-step 1) 
-(global-set-key "\C-h" 'delete-backward-char)
+      scroll-step 1)
+(global-set-key "\C-h" 'delete-backward-char); ; copy&paste using clipboard
+; ; (when (equal system-type 'gnu/linux)
+; ;   (setq x-select-enable-clipboard t)
+; ;   (setq-default indent-tabs-mode nil)
+; ;   (if (display-graphic-p)
+; ;       (progn
+; ;         (setq x-select-enable-clipboard t)
+; ;         (global-set-key "\C-y" 'x-clipboard-yank))
+; ;     (progn
+; ;       (setq interprogram-paste-function
+;;  # '(lambda () (shell-command-to-string "xsel -b -o")))
+; ;       (setq interprogram-cut-function
+;;  # '(lambda (text &optional rest)
+;;                 (let *
+; ;                     ((process-connection-type nil)
+; ;                      (proc (start-process "xsel" "*Messages*" "xsel" "-b" "-i")))
+; ;                   (process-send-string proc text)
+; ;                   (process-send-eof proc)))))))
 
-;; copy&paste using clipboard
-(when (equal system-type 'gnu/linux)
-  (setq x-select-enable-clipboard t)
-  (setq-default indent-tabs-mode t)
-  (if (display-graphic-p)
-      (progn
-        (setq x-select-enable-clipboard t)
-        (global-set-key "\C-y" 'x-clipboard-yank))
-    (progn
-      (setq interprogram-paste-function
-            #'(lambda () (shell-command-to-string "xsel -b -o")))
-      (setq interprogram-cut-function
-            #'(lambda (text &optional rest)
-                (let*
-                    ((process-connection-type nil)
-                     (proc (start-process "xsel" "*Messages*" "xsel" "-b" "-i")))
-                  (process-send-string proc text)
-                  (process-send-eof proc)))))))
-
-;; use markdown-mode for emacs
-;; multimarkdownをinstallする必要がある
-;; C-c C-c v ブラウザでプレビュー
-;; C-c C-c l ewwでpreview
-;; C-c C-x Enterでbuffer内で整形表示
-(use-package markdown-mode
-  :ensure t     
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . gfm-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :config (setq markdown-command "multimarkdown"))
-(use-package company ;; 補完 company
-  :ensure t     
-  :config
-  ;; (global-company-mode) ; 全バッファで有効にする
-  (add-hook 'python-mode-hook 'company-mode)
-  (add-hook 'c++-mode-hook 'company-mode)
-  (add-hook 'markdown-mode-hook 'company-mode)
-  (add-hook 'gfm-mode-hook 'company-mode)
-  (setq company-idle-delay 0) ; デフォルトは0.5
-  (setq company-minimum-prefix-length 2) ; デフォルトは4
-  (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-  )
-(use-package anzu ;; 検索文字が何番目か教えてくれるanzu
-  :ensure t     
-  :config (global-anzu-mode +1))
+; ; use markdown-mode for emacs
+; ; multimarkdownをinstallする必要がある
+; ; C-c C-c v ブラウザでプレビュー
+; ; C-c C-c l ewwでpreview
+; ; C-c C-x Enterでbuffer内で整形表示
+;; (use-package markdown-mode: ensure t: mode(("README\\.md\\'" . gfm-mode)
+;;          ("\\.md\\'" . gfm-mode)
+;;          ("\\.markdown\\'" . markdown-mode)): config(setq markdown-command "multimarkdown"))
+;; (use-package company;; 補完 company
+;;   : ensure t: config; ; (global-company-mode) ; 全バッファで有効にする
+;;   (add-hook 'python-mode-hook 'company-mode)
+;;   (add-hook 'c++-mode-hook 'company-mode)
+;;   (add-hook 'markdown-mode-hook 'company-mode)
+;;   (add-hook 'gfm-mode-hook 'company-mode)
+;;   (setq company-idle-delay 0); デフォルトは0.5
+;;   (setq company-minimum-prefix-length 2); デフォルトは4
+;;   (setq company-selection-wrap-around t); 候補の一番下でさらに下に行こうとすると一番上に戻る
+;;   )
+;; (use-package anzu;; 検索文字が何番目か教えてくれるanzu
+;;   : ensure t: config(global-anzu-mode + 1))
 (with-eval-after-load 'eww
-  (setq eww-search-prefix "https://www.google.co.jp/search?q=")
-  ;; 普通のewwは背景が白っぽくなるので、白っぽくならないための設定
+  (setq eww-search-prefix "https://www.google.co.jp/search?q=");; 普通のewwは背景が白っぽくなるので、白っぽくならないための設定
   (defvar eww-disable-colorize t)
-  (defun shr-colorize-region--disable (orig start end fg &optional bg &rest _)
+  (defun shr-colorize-region--disable(orig start end fg & optional bg & rest _)
     (unless eww-disable-colorize
       (funcall orig start end fg)))
   (advice-add 'shr-colorize-region :around 'shr-colorize-region--disable)
@@ -256,22 +258,27 @@
                                      (setq eww-hl-search-word nil)))
   )
 
-(use-package flycheck
-  :ensure t     
-  :config
-  (add-hook 'after-init-hook #'global-flycheck-mode)
-  (when (require 'flycheck nil 'noerror)
-    (custom-set-variables
-     ;; エラーをポップアップで表示
-     '(flycheck-display-errors-function
-       (lambda (errors)
-         (let ((messages (mapcar #'flycheck-error-message errors)))
-           (popup-tip (mapconcat 'identity messages "\n")))))
-     '(flycheck-display-errors-delay 0.5))
-    (define-key flycheck-mode-map (kbd "C-M-n") 'flycheck-next-error)
-    (define-key flycheck-mode-map (kbd "C-M-p") 'flycheck-previous-error)
-    (add-hook 'c-mode-common-hook 'flycheck-mode))
-  )
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+
+;; (use-package flycheck
+;;   :ensure t     
+;;   :config
+;;   (add-hook 'after-init-hook #'global-flycheck-mode)
+;;   (when (require 'flycheck nil 'noerror)
+;;     (custom-set-variables
+;;      ;; エラーをポップアップで表示
+;;      '(flycheck-display-errors-function
+;;        (lambda (errors)
+;;          (let ((messages (mapcar #'flycheck-error-message errors)))
+;;            (popup-tip (mapconcat 'identity messages "\n")))))
+;;      '(flycheck-display-errors-delay 0.5))
+;;     (define-key flycheck-mode-map (kbd "C-M-n") 'flycheck-next-error)
+;;     (define-key flycheck-mode-map (kbd "C-M-p") 'flycheck-previous-error)
+;;     (add-hook 'c-mode-common-hook 'flycheck-mode))
+;;   )
 
 ;; M-x yas-describe-tablesで現在展開できるテンプレートを表示できる
 ;; yasnippet-snippetsでsnippets群を入れて使う
@@ -349,18 +356,18 @@
 ;; 検索listでtabを押すと、そこまで飛んでくれる。C-mすればそこに着地、C-gすると、検索を始めた時点に戻ってくれる。
 ;; ==========================================================================================================
 
-(use-package migemo
-  :ensure t
-  :config
-  (setq migemo-command "cmigemo")
-  (setq migemo-options '("-q" "--emacs"))
-  ;; Set your installed path
-  (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
-  (setq migemo-user-dictionary nil)
-  (setq migemo-regex-dictionary nil)
-  (setq migemo-coding-system 'utf-8-unix)
-  (migemo-init)
-  )
+;; (use-package migemo
+;;   :ensure t
+;;   :config
+;;   (setq migemo-command "cmigemo")
+;;   (setq migemo-options '("-q" "--emacs"))
+;;   ;; Set your installed path
+;;   (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
+;;   (setq migemo-user-dictionary nil)
+;;   (setq migemo-regex-dictionary nil)
+;;   (setq migemo-coding-system 'utf-8-unix)
+;;   (migemo-init)
+;;   )
 (use-package ripgrep
   :ensure t     
   :config (setq ripgrep-arguments '("-S"))
@@ -543,32 +550,39 @@ _SPC_ cancel
   (setq desktop-save-mode 1)  
   )
 
-;; ;;;
+;; (use-package python-mode
+;;   :ensure t
+;;   :config)
+(autoload 'python-mode "python-mode" "Python Mode." t)
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+
+(use-package py-autopep8
+  :ensure t
+  :config
+  (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+  (setq py-autopep8-options '("--max-line-length=120"))
+  )
+
+(use-package mwim
+  :ensure t
+  :config
+  (global-set-key (kbd "C-a") 'mwim-beginning)
+  (global-set-key (kbd "C-e") 'mwim-end))
+
+;;;
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(flycheck-display-errors-delay 0.5)
- '(flycheck-display-errors-function
-   (lambda
-	 (errors)
-	 (let
-		 ((messages
-		   (mapcar
-			(function flycheck-error-message)
-			errors)))
-	   (popup-tip
-		(mapconcat
-		 (quote identity)
-		 messages "
-")))))
  '(package-selected-packages
    (quote
-	(shell-here avy migemo dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd flycheck diminish company anzu))))
+    (shell-here avy migemo dumb-jump yasnippet volatile-highlights use-package undo-tree spacemacs-theme ripgrep markdown-mode magit hydra helm-projectile flymd diminish company anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
