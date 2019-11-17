@@ -1,6 +1,9 @@
 :set hls
 :set nrformats=
 colorscheme molokai
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+:set autochdir
+" :set path+=~/.vimrc
 
 " setting
 if has('vim_starting')
@@ -37,6 +40,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "" auto bracket
 Plug 'Raimondi/delimitMate'
+"surrondは cs}]で{London}を[London]にできる
 Plug 'tpope/vim-surround'
 "" auto format
 Plug 'Chiel92/vim-autoformat'
@@ -93,6 +97,7 @@ if exists('make')
     let g:make = 'make'
 endif
 
+" If activate, Python becomes very heavy.
 " "" auto-format
 " Au BufWrite * :Autoformat
 
@@ -155,18 +160,18 @@ let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
 "
-" "" jedi-vim
-" let g:jedi#popup_on_dot = 0
-" let g:jedi#goto_assignments_command = "<leader>g"
-" let g:jedi#goto_definitions_command = "<leader>d"
-" let g:jedi#documentation_command = "K"
-" let g:jedi#usages_command = "<leader>n"
-" let g:jedi#rename_command = "<leader>r"
-" let g:jedi#show_call_signatures = "0"
-" let g:jedi#completions_command = "<C-Space>"
-" let g:jedi#smart_auto_mappings = 0
-" let g:jedi#force_py_version = 3
-" autocmd FileType python setlocal completeopt-=preview
+"" jedi-vim
+let g:jedi#popup_on_dot = 0
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#show_call_signatures = "0"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#force_py_version = 3
+autocmd FileType python setlocal completeopt-=preview
 "
 "" syntastic
 let g:syntastic_python_checkers=['python', 'flake8']
@@ -299,15 +304,15 @@ nnoremap <Leader>v :<C-u>vsplit<CR>
 " vmap <C-x> :!pbcopy<CR>
 " vmap <C-c> :w !pbcopy<CR><CR>
 "
-" "" move line/word
-" nmap <C-e> $
-" nmap <C-a> 0
-" nmap <C-f> W
-" nmap <C-b> B
-" imap <C-e> <C-o>$
-" imap <C-a> <C-o>0
-" imap <C-f> <C-o>W
-" imap <C-b> <C-o>B
+"" move line/word
+nmap <C-e> $
+nmap <C-a> 0
+nmap <C-f> W
+nmap <C-b> B
+imap <C-e> <C-o>$
+imap <C-a> <C-o>0
+imap <C-f> <C-o>W
+imap <C-b> <C-o>B
 "
 " base
 set encoding=utf-8
