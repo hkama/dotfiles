@@ -1,8 +1,48 @@
+" vim 8.1以降でないと動かないらしい
+" "dein Scripts-----------------------------
+" if &compatible
+"   set nocompatible               " Be iMproved
+"   endif
+"
+" " Required:
+" set runtimepath+=/home/kamada/.cache/dein/repos/github.com/Shougo/dein.vim
+"
+" " Required:
+" if dein#load_state('/home/kamada/.cache/dein')
+"   call dein#begin('/home/kamada/.cache/dein')
+"
+"   " Let dein manage dein
+"   " Required:
+"     call dein#add('/home/kamada/.cache/dein/repos/github.com/Shougo/dein.vim')
+"
+"   " Add or remove your plugins here like this:
+"   "call dein#add('Shougo/neosnippet.vim')
+"     "call dein#add('Shougo/neosnippet-snippets')
+"
+"   " Required:
+"     call dein#end()
+"       call dein#save_state()
+"       endif
+"
+" " Required:
+" filetype plugin indent on
+" syntax enable
+"
+" " If you want to install not installed plugins on startup.
+" "if dein#check_install()
+" "  call dein#install()
+" "endif
+"
+" "End dein Scripts-------------------------
+
 :set hls
 :set nrformats=
 colorscheme molokai
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 :set autochdir
+autocmd QuickFixCmdPost *grep* cwindow
+
+
 " :set path+=~/.vimrc
 
 " setting
@@ -24,15 +64,16 @@ endif
 
 " plugin
 call plug#begin(expand('~/.vim/plugged'))
+
 " Plug 'mattn/vim-starwars'
 "" space + ne -> sidebar
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 "" ga -> align
-Plug 'junegunn/vim-easy-align'
+" Plug 'junegunn/vim-easy-align'
 "" space + qr -> exec script
-Plug 'thinca/vim-quickrun'
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+" Plug 'thinca/vim-quickrun'
+" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 "" gcc -> comment
 Plug 'tpope/vim-commentary'
 "" option bar
@@ -41,7 +82,7 @@ Plug 'vim-airline/vim-airline-themes'
 "" auto bracket
 Plug 'Raimondi/delimitMate'
 "surrondは cs}]で{London}を[London]にできる
-Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-surround'
 "" auto format
 Plug 'Chiel92/vim-autoformat'
 "" error detect
@@ -53,14 +94,14 @@ Plug 'sheerun/vim-polyglot'
 Plug 'Valloric/YouCompleteMe'
 Plug 'ervandew/supertab'
 "" html
-Plug 'hail2u/vim-css3-syntax'
-Plug 'gorodinskiy/vim-coloresque'
-Plug 'tpope/vim-haml'
-Plug 'mattn/emmet-vim'
+" Plug 'hail2u/vim-css3-syntax'
+" Plug 'gorodinskiy/vim-coloresque'
+" Plug 'tpope/vim-haml'
+" Plug 'mattn/emmet-vim'
 "" javascript
-Plug 'jelera/vim-javascript-syntax'
+" Plug 'jelera/vim-javascript-syntax'
 "" php
-Plug 'arnaud-lb/vim-php-namespace'
+" Plug 'arnaud-lb/vim-php-namespace'
 "" python
 Plug 'davidhalter/jedi-vim'
 Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
@@ -152,14 +193,14 @@ let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_prompt =  '$ '
 "
 "" syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
-let g:syntastic_aggregate_errors = 1
-"
+" let g:syntastic_always_populate_loc_list=1
+" let g:syntastic_error_symbol='✗'
+" let g:syntastic_warning_symbol='⚠'
+" let g:syntastic_style_error_symbol = '✗'
+" let g:syntastic_style_warning_symbol = '⚠'
+" let g:syntastic_auto_loc_list=1
+" let g:syntastic_aggregate_errors = 1
+
 "" jedi-vim
 let g:jedi#popup_on_dot = 0
 let g:jedi#goto_assignments_command = "<leader>g"
@@ -174,9 +215,13 @@ let g:jedi#force_py_version = 3
 autocmd FileType python setlocal completeopt-=preview
 "
 "" syntastic
-let g:syntastic_python_checkers=['python', 'flake8']
+" let g:syntastic_python_checkers=['python', 'flake8']
+let g:syntastic_python_checkers=['flake8']
 let g:polyglot_disabled = ['python']
 let python_highlight_all = 1
+let g:syntastic_python_flake8_args="--max-line-length=120"
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 "
 "" vim-airline
 let g:airline#extensions#virtualenv#enabled = 1
@@ -348,18 +393,39 @@ set title
 set titleold="Terminal"
 set titlestring=%F
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
+
 set autoread
 set noerrorbells visualbell t_vb=
 set clipboard+=unnamed,autoselect
 set mouse=a
 set whichwrap=b,s,h,l,<,>,[,]
 
-" " template
-" augroup templateGroup
-"     autocmd!
-"     autocmd BufNewFile *.html :0r ~/vim-template/t.html
-"     autocmd BufNewFile *.cpp :0r ~/vim-template/t.cpp
-"     autocmd BufNewFile *.py :0r ~/vim-template/t.py
-" augroup END
+" template
+augroup templateGroup
+    autocmd!
+    autocmd BufNewFile *.html :0r ~/vim-template/t.html
+    autocmd BufNewFile *.cpp :0r ~/vim-template/t.cpp
+    autocmd BufNewFile *.py :0r ~/vim-template/t.py
+augroup END
 " snippet
 let g:UltiSnipsSnippetDirectories=["~/vim-snippets/"]
+
+
+
+
+
+" paren color
+" hi MatchParen term=standout ctermbg=LightGrey ctermfg=Black guibg=LightGrey guifg=Black
+" hi! MatchParen cterm=NONE,bold gui=NONE,bold  guibg=#eee8d5 guifg=NONE
+hi MatchParen cterm=underline ctermbg=none ctermfg=NONE
+" let loaded_matchparen = 1
+
+" indent settings
+set expandtab
+" show existing tab with 2 spaces width
+set tabstop=2
+set softtabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
+
+let g:syntastic_cpp_checkers = ['clang_check']
