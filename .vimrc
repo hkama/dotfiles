@@ -396,7 +396,10 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 
 set autoread
 set noerrorbells visualbell t_vb=
-set clipboard+=unnamed,autoselect
+" set clipboard+=unnamed,autoselect
+" C-v to clip
+set clipboard=unnamedplus
+
 set mouse=a
 set whichwrap=b,s,h,l,<,>,[,]
 
@@ -428,4 +431,4 @@ set softtabstop=2
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
 
-let g:syntastic_cpp_checkers = ['clang_check']
+let g:syntastic_cpp_checkers = ['clang-format-3.9']
