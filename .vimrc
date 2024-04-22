@@ -91,7 +91,7 @@ Plug 'scrooloose/syntastic'
 Plug 'bronson/vim-trailing-whitespace'
 "" auto complete
 Plug 'sheerun/vim-polyglot'
-Plug 'Valloric/YouCompleteMe'
+" Plug 'Valloric/YouCompleteMe'
 Plug 'ervandew/supertab'
 "" html
 " Plug 'hail2u/vim-css3-syntax'
@@ -120,23 +120,23 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsEditSplit="vertical"
 
-"" youcompleteme
-let g:ycm_server_python_interpreter = '/usr/bin/python2.7'
-let g:ycm_python_binary_path = '/usr/bin/python2.7'
-let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
-let g:ycm_auto_trigger = 1
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_previous_completion = ['<Up>']
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "ᐅ"
-let g:ycm_key_list_stop_completion = ['<C-y>', '<Enter>']
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:SuperTabDefaultCompletionType = '<C-n>'
-let g:make = 'gmake'
-if exists('make')
-    let g:make = 'make'
-endif
+" "" youcompleteme
+" let g:ycm_server_python_interpreter = '/usr/bin/python2.7'
+" let g:ycm_python_binary_path = '/usr/bin/python2.7'
+" let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
+" let g:ycm_auto_trigger = 1
+" let g:ycm_min_num_of_chars_for_completion = 1
+" let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_key_list_select_completion = ['<Down>']
+" let g:ycm_key_list_previous_completion = ['<Up>']
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "ᐅ"
+" let g:ycm_key_list_stop_completion = ['<C-y>', '<Enter>']
+" let g:ycm_seed_identifiers_with_syntax = 1
+" let g:SuperTabDefaultCompletionType = '<C-n>'
+" let g:make = 'gmake'
+" if exists('make')
+"     let g:make = 'make'
+" endif
 
 " If activate, Python becomes very heavy.
 " "" auto-format
@@ -398,7 +398,7 @@ set autoread
 set noerrorbells visualbell t_vb=
 " set clipboard+=unnamed,autoselect
 " C-v to clip
-set clipboard=unnamedplus
+" set clipboard=unnamedplus
 
 set mouse=a
 set whichwrap=b,s,h,l,<,>,[,]
