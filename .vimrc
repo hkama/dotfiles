@@ -108,8 +108,8 @@ Plug 'raimon49/requirements.txt.vim', {'for': 'requirements'}
 "" space + sh -> vimshell
 Plug 'Shougo/vimshell.vim'
 "" snippet
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 call plug#end()
 filetype plugin indent on
 let mapleader="\<Space>"
