@@ -1,7 +1,7 @@
 
 
-defaults write -g KeyRepeat -int 1
-defaults write -g InitialKeyRepeat -int 12
+# defaults write -g KeyRepeat -int 1
+# defaults write -g InitialKeyRepeat -int 10
 
 export PROFILE_NAME=default
 export USER_NAME=hitoshi.kamada@woven-planet.global
@@ -42,6 +42,12 @@ function port_forward() {
 
 # for docker BuildKit
 export DOCKER_BUILDKIT=1
+
+# brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+
 
 # function report_call() {
 #     line=$(lsof -i:$2 | tail -n 1)
